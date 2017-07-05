@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import json
 
 NAMES_JSON = 'names_44.json'
