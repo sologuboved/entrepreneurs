@@ -11,11 +11,23 @@ NAMEBASE_M = 'namebase_m.json'
 
 
 def scrape_names(url):
+    """
+    :param url: string (url)
+    :return: list
+    Scrape names from page
+    """
     soup = BeautifulSoup(requests.get(url).content)
     return [name.find_all('a')[0].text for name in soup.find_all('div', {'class': 'nameslist'})]
 
 
-def amplify_names(names, fem=False):
+def amplify_name_database(names, fem=False):
+    """
+    :param names: list
+    :param fem: True or False
+    :return: list
+    Include Фекла in addition to Фёкла, etc.
+    Add names that are popular but missing from the original database
+    """
 
     amplified = list()
 
@@ -35,6 +47,11 @@ def amplify_names(names, fem=False):
 
 
 def substitute_ye_for_yo(name):
+    """
+    :param name: string
+    :return: string
+    Substitute ё for е in the given name
+    """
     substituted = ''
     for char in name:
         if char == u'ё':
@@ -61,8 +78,8 @@ if __name__ == '__main__':
     # names_m = scrape_names(URL_M)
     # names_to_json(names_m, NAMEBASE_M)
 
-    # names_to_json(amplify_names(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
-    # names_to_json(amplify_names(load_json(NAMEBASE_M)), NAMEBASE_M)
+    # names_to_json(amplify_name_database(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
+    # names_to_json(amplify_name_database(load_json(NAMEBASE_M)), NAMEBASE_M)
 
     pass
 
