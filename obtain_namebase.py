@@ -20,7 +20,7 @@ def scrape_names(url):
     return [name.find_all('a')[0].text for name in soup.find_all('div', {'class': 'nameslist'})]
 
 
-def amplify_name_database(names, fem=False):
+def amplify_namebase(names, fem=False):
     """
     :param names: list
     :param fem: True or False
@@ -78,8 +78,8 @@ if __name__ == '__main__':
     # names_m = scrape_names(URL_M)
     # names_to_json(names_m, NAMEBASE_M)
 
-    # names_to_json(amplify_name_database(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
-    # names_to_json(amplify_name_database(load_json(NAMEBASE_M)), NAMEBASE_M)
+    # names_to_json(amplify_namebase(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
+    # names_to_json(amplify_namebase(load_json(NAMEBASE_M)), NAMEBASE_M)
 
     pass
 
