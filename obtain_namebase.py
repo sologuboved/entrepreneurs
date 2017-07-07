@@ -26,7 +26,7 @@ def amplify_namebase(names, fem=False):
     :param fem: True or False
     :return: list
     Include Фекла in addition to Фёкла, etc.
-    Add names that are popular but missing from the original database
+    Add names that are popular but missing from the original namebase
     """
 
     amplified = list()
