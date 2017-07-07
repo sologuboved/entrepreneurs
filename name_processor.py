@@ -100,31 +100,34 @@ def sort_freq_dict(freq_dict):
     return sorted(freq_dict.items(), key=lambda n: n[1], reverse=True)
 
 
-if __name__ == '__main__':
+def print_freqs(sorted_freqs, label, lim=None):
+    """
+    :param sorted_freqs: list of tuples
+    :param label: string
+    :param lim: int or None
+    :return: None
+    Prettyprint sorted name frequencies
+    """
+    num_names = len(sorted_freqs)
+    num_entries = sum([entry[1] for entry in sorted_freqs])
+    if not lim:
+        lim = num_names
+    print "FREQUENCIES OF %s NAMES" % label,
+    print "[%d names, %d entries]:" % (num_names, num_entries)
+    print "Printing first %d names..." % lim
+    print
+    index = 0
+    while index < lim and index < num_names:
+        name, freq = sorted_freqs[index]
+        print name + ':', freq
+        index += 1
+    print
+    print
 
+
+if __name__ == '__main__':
     # group_names(NAMES_44, NAMEBASE_F, NAMEBASE_M, NAMES_F, NAMES_M, UNCLEAR)
 
-    print "FREQUENCIES: FEMALE",
-    sorted_f = sort_freq_dict(compile_freq_dict(load_json(NAMES_F), fem=True))
-    print "[%d names, %d entries]" % (len(sorted_f), sum([entry[1] for entry in sorted_f]))
-    print
-    for n, freq in sorted_f:
-        print n + ':', freq
-    print
-    print
-
-    print "FREQUENCIES: MALE",
-    sorted_m = sort_freq_dict(compile_freq_dict(load_json(NAMES_M)))
-    print "[%d names, %d entries]" % (len(sorted_m), sum([entry[1] for entry in sorted_m]))
-    print
-    for n, freq in sorted_m:
-        print n + ':', freq
-    print
-    print
-
-    print "FREQUENCIES: UNCLEAR",
-    sorted_unclear = sort_freq_dict(compile_freq_dict(load_json(UNCLEAR)))
-    print "[%d names, %d entries; showing first 20]" % (len(sorted_unclear), sum([entry[1] for entry in sorted_unclear]))
-    print
-    for n, freq in sorted_unclear[: 20]:
-        print n + ':', freq
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(NAMES_F), fem=True)), 'FEMALE')
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(NAMES_M))), 'MALE')
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(UNCLEAR))), 'UNCLEAR', lim=20)
