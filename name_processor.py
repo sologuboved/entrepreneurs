@@ -31,7 +31,7 @@ def clean_names(names):
 
 def group_names(names_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file):
     """
-    :param names_file: .json file
+    :param names_file: .json
     :param namebase_f_file: .json
     :param namebase_m_file: .json
     :param names_f_file: .json
