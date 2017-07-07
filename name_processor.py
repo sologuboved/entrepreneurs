@@ -50,22 +50,6 @@ def group_names(names_file, namebase_f_file, namebase_m_file, names_f_file, name
     print
     print
 
-    # print 'names_f'
-    # print len(names_f)
-    # for name in names_f[:10]:
-    #     print name
-    # print
-    # print
-    # print 'names_m'
-    # print len(names_m)
-    # for name in names_m[:10]:
-    #     print name
-    # print
-    # print
-    # print len(unclear)
-    # for name in unclear:
-    #     print name
-
 
 def compile_freq_dict(names, fem=False):
     freq_dict = dict()
