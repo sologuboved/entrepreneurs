@@ -21,10 +21,26 @@ def dump_json(names, json_file):
 
 
 def clean_names(names):
+    """
+    :param names: list
+    :return: list
+    Correct char case
+    """
     return [name[0].upper() + name[1:].lower() for name in names]
 
 
 def group_names(names_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file):
+    """
+    :param names_file: .json file
+    :param namebase_f_file: .json
+    :param namebase_m_file: .json
+    :param names_f_file: .json
+    :param names_m_file: .json
+    :param unclear_file: .json
+    :return: None
+    Classify names according to gender and dump corresponding .jsons
+    """
+
     names = load_json(names_file)
     namebase_f = load_json(namebase_f_file)
     namebase_m = load_json(namebase_m_file)
@@ -52,6 +68,12 @@ def group_names(names_file, namebase_f_file, namebase_m_file, names_f_file, name
 
 
 def compile_freq_dict(names, fem=False):
+    """
+    :param names: list
+    :param fem: True or False
+    :return: dict
+    Calculate name frequencies: {name: frequency}
+    """
     freq_dict = dict()
 
     for name in names:
@@ -70,6 +92,11 @@ def compile_freq_dict(names, fem=False):
 
 
 def sort_freq_dict(freq_dict):
+    """
+    :param freq_dict: dict
+    :return: list of tuples
+    Sort name frequencies from large to small: [(name0: max frequency), ..., (name-1: min frequency)]
+    """
     return sorted(freq_dict.items(), key=lambda n: n[1], reverse=True)
 
 
