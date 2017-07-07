@@ -27,7 +27,7 @@ def names_to_json(names, json_file):
 
 if __name__ == '__main__':
     names_f = scrape_names(URL_F)
-    names_to_json(names_f JSON_F)
+    names_to_json(names_f, JSON_F)
 
     names_m = scrape_names(URL_M)
     names_to_json(names_m, JSON_M)
