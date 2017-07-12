@@ -1,11 +1,26 @@
-711543 duplicates in contact_names_2014.json
-1835241 lines in contact_names_2014.json
+contact_names_2014.json
+1835241 lines
+711543 repeating lines
+825764 apparent duplicates
+297934 remain
 
-518259 duplicates in contact_names_2015.json
-1845199 lines in contact_names_2015.json
 
-644961 duplicates in contact_names_2016.json
-1644332 lines in contact_names_2016.json
+contact_names_2015.json
+1845199 lines
+518259 repeating lines
+1039613 apparent duplicates
+287327 remain
 
-91522 duplicates in contact_names_2017.json
-865603 lines in contact_names_2017.json
+
+contact_names_2016.json
+1644332 lines
+644961 repeating lines
+745457 apparent duplicates
+253914 remain
+
+
+contact_names_2017.json
+865603 lines
+91522 repeating lines
+610680 apparent duplicates
+163401 remain

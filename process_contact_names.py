@@ -10,6 +10,10 @@ ED_NAMES_2014 = 'ed_contact_names_2014.json'
 ED_NAMES_2015 = 'ed_contact_names_2015.json'
 ED_NAMES_2016 = 'ed_contact_names_2016.json'
 ED_NAMES_2017 = 'ed_contact_names_2017.json'
+FINAL_NAMES_2014 = 'final_contact_names_2014.json'
+FINAL_NAMES_2015 = 'final_contact_names_2015.json'
+FINAL_NAMES_2016 = 'final_contact_names_2016.json'
+FINAL_NAMES_2017 = 'final_contact_names_2017.json'
 TEST_JSON_0 = 'test0.json'
 TEST_JSON_1 = 'test1.json'
 
@@ -33,6 +37,32 @@ def eliminate_repeating_lines(json_file, ed_json_file):
     print len(all_lines)
 
 
+def print_remaining_duplicates(json_file):
+    all_lines = load_json(json_file)
+    already_there = set()
+    for (x, y, z) in all_lines:
+        if (x, y, z) not in already_there:
+            already_there.add((x, y, z))
+        else:
+            print x, y, z
+
+
+def eliminate_remaining_duplicates(json_file, final_json_file):
+    all_lines = [(x, y, z) for x, y, z in load_json(json_file)]
+    without_duplicates = set(all_lines)
+    print len(all_lines) - len(without_duplicates), "apparent duplicates"
+    print len(without_duplicates), "lines remain"
+    without_duplicates = [[x, y, z] for x, y, z in without_duplicates]
+    print "Starting dump..."
+    dump_json(without_duplicates, final_json_file)
+
+
+
+
+
+
+
+
 if __name__ == '__main__':
     # list_of_lines = [['a', 'b', 'c'], ['a', 'b', 'c'], ['a', 'b', 'c'], ['a', 'b', 'c'],
     #                  ['x', 'y', 'z'],
@@ -53,4 +83,6 @@ if __name__ == '__main__':
     # eliminate_repeating_lines(NAMES_2015, ED_NAMES_2015)
     # eliminate_repeating_lines(NAMES_2016, ED_NAMES_2016)
     # eliminate_repeating_lines(NAMES_2017, ED_NAMES_2017)
+    # print_remaining_duplicates(ED_NAMES_2017)
+    eliminate_remaining_duplicates(ED_NAMES_2017, FINAL_NAMES_2017)
     pass
