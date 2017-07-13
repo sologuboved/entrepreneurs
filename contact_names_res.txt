@@ -624,3 +624,9 @@ Printing first 20 names...
 Ф.: 0.330% (501)
 Александрович: 0.328% (498)
 
+
+From contact_unclear.json:
+1448 additional female names
+3837 additional male names
+44774 unclear names left
+
