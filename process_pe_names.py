@@ -88,6 +88,12 @@ def compile_freq_dict(names, fem=False):
         freq_dict.pop(u'Софья', None)
         freq_dict.pop(u'София', None)
 
+    total_num = sum(freq_dict.values())
+
+    for name in freq_dict:
+        freq = freq_dict[name]
+        freq_dict[name] = (freq, freq * 100.0 / total_num)
+
     return freq_dict
 
 
@@ -109,7 +115,7 @@ def print_freqs(sorted_freqs, label, lim=None):
     Prettyprint sorted name frequencies
     """
     num_names = len(sorted_freqs)
-    num_entries = sum([entry[1] for entry in sorted_freqs])
+    num_entries = sum([entry[1][0] for entry in sorted_freqs])
     if not lim:
         lim = num_names
     print "FREQUENCIES OF %s NAMES" % label,
@@ -118,8 +124,9 @@ def print_freqs(sorted_freqs, label, lim=None):
     print
     index = 0
     while index < lim and index < num_names:
-        name, freq = sorted_freqs[index]
-        print name + ':', freq
+        name, nums = sorted_freqs[index]
+        freq, percent = nums
+        print name + ':', "{:.3f}".format(percent) + '%', '(' + str(freq) + ')'
         index += 1
     print
     print
