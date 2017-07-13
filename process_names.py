@@ -2,12 +2,23 @@
 
 import json
 
-NAMES_44 = 'names_44.json'
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
-NAMES_F = 'names_f.json'
-NAMES_M = 'names_m.json'
-UNCLEAR = 'unclear.json'
+
+NAMES_44 = 'names_44.json'
+PE_NAMES_F = 'names_f.json'
+PE_NAMES_M = 'names_m.json'
+PE_UNCLEAR = 'unclear.json'
+
+FINAL_CONTACT_NAMES_2014 = 'final_contact_names_2014.json'
+FINAL_CONTACT_NAMES_2015 = 'final_contact_names_2015.json'
+FINAL_CONTACT_NAMES_2016 = 'final_contact_names_2016.json'
+FINAL_CONTACT_NAMES_2017 = 'final_contact_names_2017.json'
+
+FINAL_MERGED_CONTACT_NAMES = 'final_merged_contact_names.json'
+CONTACT_NAMES_F = 'contact_names_f.json'
+CONTACT_NAMES_M = 'contact_names_m.json'
+CONTACT_UNCLEAR = 'contact_unclear.json'
 
 
 def load_json(json_file):
@@ -132,9 +143,15 @@ def print_freqs(sorted_freqs, label, lim=None):
     print
 
 
-if __name__ == '__main__':
-    # group_names(NAMES_44, NAMEBASE_F, NAMEBASE_M, NAMES_F, NAMES_M, UNCLEAR)
+def launch(source_json_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file):
+    # raw_names = load_json(source_json_file)
+    # cleaned_names = clean_names(raw_names)
+    # dump_json(cleaned_names, source_json_file)
+    group_names(source_json_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file)
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_f_file), fem=True)), 'FEMALE')
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_m_file))), 'MALE')
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(unclear_file))), 'UNCLEAR', lim=20)
 
-    print_freqs(sort_freq_dict(compile_freq_dict(load_json(NAMES_F), fem=True)), 'FEMALE')
-    print_freqs(sort_freq_dict(compile_freq_dict(load_json(NAMES_M))), 'MALE')
-    print_freqs(sort_freq_dict(compile_freq_dict(load_json(UNCLEAR))), 'UNCLEAR', lim=20)
+
+if __name__ == '__main__':
+    launch(FINAL_MERGED_CONTACT_NAMES, NAMEBASE_F, NAMEBASE_M, CONTACT_NAMES_F, CONTACT_NAMES_M, CONTACT_UNCLEAR)
