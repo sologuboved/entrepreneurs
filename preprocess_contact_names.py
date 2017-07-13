@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from process_names import load_json, dump_json
+from json_operations import load_json, dump_json
 
 CONTACT_NAMES_2014 = 'contact_names_2014.json'
 CONTACT_NAMES_2015 = 'contact_names_2015.json'

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import json
+from json_operations import load_json, dump_json
 
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
@@ -22,16 +22,6 @@ CONTACT_UNCLEAR = 'contact_unclear.json'
 
 PROCESSED_PE_UNCLEAR = 'processed_pe_unclear.json'
 PROCESSED_CONTACT_UNCLEAR = 'processed_contact_unclear.json'
-
-
-def load_json(json_file):
-    with open(json_file) as data:
-        return json.load(data)
-
-
-def dump_json(names, json_file):
-    with open(json_file, 'w') as handler:
-        json.dump(names, handler)
 
 
 def clean_names(names):
@@ -151,11 +141,12 @@ def launch(source_json_file, namebase_f_file, namebase_m_file, names_f_file, nam
     # cleaned_names = clean_names(raw_names)
     # dump_json(cleaned_names, source_json_file)
     # group_names(source_json_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file)
-    # print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_f_file), fem=True)), 'FEMALE')
-    # print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_m_file))), 'MALE')
-    # print_freqs(sort_freq_dict(compile_freq_dict(load_json(unclear_file))), 'UNCLEAR', lim=40)
-    print_freqs(sort_freq_dict(compile_freq_dict(load_json(PROCESSED_CONTACT_UNCLEAR))), 'UNCLEAR', lim=40)
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_f_file), fem=True)), 'FEMALE')
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_m_file))), 'MALE')
+    print_freqs(sort_freq_dict(compile_freq_dict(load_json(unclear_file))), 'UNCLEAR', lim=40)
 
 
 if __name__ == '__main__':
-    launch(FINAL_MERGED_CONTACT_NAMES, NAMEBASE_F, NAMEBASE_M, CONTACT_NAMES_F, CONTACT_NAMES_M, CONTACT_UNCLEAR)
+    launch(FINAL_MERGED_CONTACT_NAMES,
+           NAMEBASE_F, NAMEBASE_M,
+           CONTACT_NAMES_F, CONTACT_NAMES_M, PROCESSED_CONTACT_UNCLEAR)
