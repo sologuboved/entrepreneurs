@@ -2,6 +2,7 @@
 
 import requests
 from bs4 import BeautifulSoup
+from json_operations import *
 
 URL_F = 'http://kakzovut.ru/woman.html'
 URL_M = 'http://kakzovut.ru/man.html'
@@ -36,11 +37,11 @@ def amplify_namebase(names, fem=False):
             amplified.append(substitute_ye_for_yo(name))
 
     if fem:
-        amplified.extend([u'Наталия', u'София'])
+        amplified.extend([u'Наталия', u'София', u'Юлиана', u'Алеся', u'Бэлла', u'Салиса', u'Гали'])
 
     else:
         amplified.extend([u'Ринат',  u'Магомед',  u'Ильдар',  u'Данил',  u'Аслан',  u'Рустем',  u'Ренат',  u'Ришат',
-                          u'Афанасий',  u'Гагик'])
+                          u'Афанасий',  u'Гагик', u'Омар', u'Малик', u'Эдик', u'Лева'])
 
     return amplified
 
@@ -66,9 +67,9 @@ if __name__ == '__main__':
     #
     # names_m = scrape_names(URL_M)
     # dump_json(names_m, NAMEBASE_M)
-
-    # dump_json(amplify_namebase(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
-    # dump_json(amplify_namebase(load_json(NAMEBASE_M)), NAMEBASE_M)
+    #
+    dump_json(amplify_namebase(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
+    dump_json(amplify_namebase(load_json(NAMEBASE_M)), NAMEBASE_M)
 
     pass
 

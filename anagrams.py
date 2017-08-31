@@ -32,4 +32,4 @@ def count_anagrams(namebase_filename):
 
 
 if __name__ == '__main__':
-    print count_anagrams(NAMEBASE_M)
+    count_anagrams(NAMEBASE_M)

@@ -137,10 +137,10 @@ def print_freqs(sorted_freqs, label, lim=None):
 
 
 def launch(source_json_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file):
-    # raw_names = load_json(source_json_file)
-    # cleaned_names = clean_names(raw_names)
-    # dump_json(cleaned_names, source_json_file)
-    # group_names(source_json_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file)
+    raw_names = load_json(source_json_file)
+    cleaned_names = clean_names(raw_names)
+    dump_json(cleaned_names, source_json_file)
+    group_names(source_json_file, namebase_f_file, namebase_m_file, names_f_file, names_m_file, unclear_file)
     print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_f_file), fem=True)), 'FEMALE')
     print_freqs(sort_freq_dict(compile_freq_dict(load_json(names_m_file))), 'MALE')
     print_freqs(sort_freq_dict(compile_freq_dict(load_json(unclear_file))), 'UNCLEAR', lim=40)
@@ -149,4 +149,4 @@ def launch(source_json_file, namebase_f_file, namebase_m_file, names_f_file, nam
 if __name__ == '__main__':
     launch(FINAL_MERGED_CONTACT_NAMES,
            NAMEBASE_F, NAMEBASE_M,
-           CONTACT_NAMES_F, CONTACT_NAMES_M, PROCESSED_CONTACT_UNCLEAR)
+           CONTACT_NAMES_F, CONTACT_NAMES_M, CONTACT_UNCLEAR)

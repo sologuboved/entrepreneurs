@@ -6,21 +6,24 @@ def is_suitable(original, unclear):
         return contains_swap(original, unclear)
 
 
+
+
+
 def contains_omission_or_redund(original, unclear):
     shorter, longer = sorted([original, unclear], key=len)
     for ind in range(len(shorter)):
-        if shorter[ind] != longer[ind]:
-            if shorter[: ind] + longer[ind] + shorter[ind:] == longer:
+        if shorter[ind].lower() != longer[ind].lower():
+            if shorter[: ind].lower() + longer[ind].lower() + shorter[ind:].lower() == longer.lower():
                 return True
             return
-    if shorter + longer[-1] == longer:
+    if shorter.lower() + longer[-1].lower() == longer.lower():
         return True
 
 
 def contains_swap(original, unclear):
     curr_ind, next_ind = 0, 1
     while next_ind < len(unclear):
-        if unclear[: curr_ind] + unclear[next_ind] + unclear[curr_ind] + unclear[next_ind + 1:] == original:
+        if unclear[: curr_ind].lower() + unclear[next_ind].lower() + unclear[curr_ind].lower() + unclear[next_ind + 1:].lower() == original.lower():
             return True
         curr_ind += 1
         next_ind += 1

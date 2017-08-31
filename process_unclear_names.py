@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from json_operations import *
+from correct_typos import is_suitable
 
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
@@ -35,6 +36,32 @@ class Unclear(object):
         except KeyError:
             return
 
+    @staticmethod
+    def check_name_for_typo(uncl_name, name_count, total, namebase):
+
+        def print_typo_correction():
+            print name_count, "out of", total
+            print uncl_name,
+            print " --> ",
+            print orig_name
+            print
+
+        if not uncl_name[0].isalpha():
+            print "IS NOT ALPHA", uncl_name,
+            uncl_name = uncl_name[1:]
+            print uncl_name
+
+        for orig_name in namebase:
+            if orig_name[0].lower() == uncl_name[0].lower():
+                if is_suitable(orig_name, uncl_name):
+                    # print_typo_correction()
+                    return orig_name
+
+        for orig_name in namebase:
+            if is_suitable(orig_name, uncl_name):
+                # print_typo_correction()
+                return orig_name
+
     def print_additional_names(self, female=True, male=True):
         if female:
             print "Newly found female names:", len(self.to_add_f), 'names'
@@ -62,13 +89,60 @@ class Unclear(object):
             index += 1
         print
 
-    def eliminate_typos(self):
-        print "Eliminating typos..."
+    def extract_first_names(self):
+        print "Extracting first names..."
+
+        namebase_f = load_json(self.namebase_f)
+        namebase_m = load_json(self.namebase_m)
+        without_postfixes = list()
+        count_f = count_m = 0
+
+        for name in self.still_unclear:
+            name = name.split()[0]
+
+            if name in namebase_f:
+                self.to_add_f.append(name)
+                count_f += 1
+
+            elif name in namebase_m:
+                self.to_add_m.append(name)
+                count_m += 1
+
+            else:
+                without_postfixes.append(name)
+
+        print "Out of %d names %d are left; %d f names and %d m names added" % (len(self.still_unclear),
+                                                                                len(without_postfixes),
+                                                                                count_f, count_m)
+        self.still_unclear = without_postfixes
+        print
+
+    def eliminate_nonalpha(self):
+        print "Eliminating nonalpha..."
+        count = 0
+        without_nonalphas = list()
+        for name in self.still_unclear:
+            if not name.isalpha():
+                alphaed_name = str()
+                for char in name:
+                    if char.isalpha():
+                        alphaed_name += char
+                    else:
+                        count += 1
+                if alphaed_name:
+                    without_nonalphas.append(alphaed_name)
+        prev_l = len(self.still_unclear)
+        curr_l = len(without_nonalphas)
+        print "Out of %d names %d are left; %d nonaplha strings and %d nonalpha characters eliminated" \
+              % (prev_l, curr_l, prev_l - curr_l, count)
         print
 
     def eliminate_abbr(self):
         print "Eliminating abbreviations..."
+        prev_l = len(self.still_unclear)
         self.still_unclear = [name for name in self.still_unclear if len(name) > 2]
+        curr_l = len(self.still_unclear)
+        print "Out of %d names %d are left; %d abbreviations eliminated" % (prev_l, curr_l, prev_l - curr_l)
         print
 
     def eliminate_patronyms(self):
@@ -77,27 +151,75 @@ class Unclear(object):
         for name in self.still_unclear:
             if name[-2:] != u'ич' and name[-3:] != u'вна' and name[-3:] != u'чна' and name[-3:] != u'шна':
                 without_patronyms.append(name)
+
+        prev_l = len(self.still_unclear)
+        curr_l = len(without_patronyms)
+        print "Out of %d names %d are left; %d patronyms eliminated" % (prev_l, curr_l, prev_l - curr_l)
+
         self.still_unclear = without_patronyms
         print
 
     def eliminate_declension(self, show=False):
         print "Eliminating declension..."
+        count_f = count_m = 0
         namebase_f = load_json(self.namebase_f)
         namebase_m = load_json(self.namebase_m)
-        still_unclear = list()
+        without_declension = list()
 
         for name in self.still_unclear:
             print '* ',
             nominative = self.get_nominative(name)
             if nominative in namebase_f:
                 self.to_add_f.append(nominative)
+                count_f += 1
             elif nominative in namebase_m:
                 self.to_add_m.append(nominative)
+                count_m += 1
             else:
-                still_unclear.append(name)
+                without_declension.append(name)
 
-        self.still_unclear = still_unclear
         print
+        print "Out of %d names %d are left; %d f names and %d m names added" % (len(self.still_unclear),
+                                                                                len(without_declension),
+                                                                                count_f, count_m)
+
+        self.still_unclear = without_declension
+        print
+
+    def eliminate_typos(self):
+        print "Eliminating typos..."
+        name_count = count_f = count_m = 0
+        namebase_f = load_json(self.namebase_f)
+        namebase_m = load_json(self.namebase_m)
+        without_typos = list()
+        total = len(self.still_unclear)
+
+        for uncl_name in self.still_unclear:
+            name_count += 1
+
+            if uncl_name == u'Имя' or uncl_name == u'имя':
+                without_typos.append(uncl_name)
+                continue
+
+            good_f_name = self.check_name_for_typo(uncl_name, name_count, total, namebase_f)
+            if good_f_name:
+                count_f += 1
+                self.to_add_f.append(good_f_name)
+                continue
+
+            good_m_name = self.check_name_for_typo(uncl_name, name_count, total, namebase_m)
+            if good_m_name:
+                count_m += 1
+                self.to_add_m.append(good_m_name)
+                continue
+
+            without_typos.append(uncl_name)
+
+        print "Out of %d names %d are left; %d f names and %d m names added" % (len(self.still_unclear),
+                                                                                len(without_typos),
+                                                                                count_f, count_m)
+
+        self.still_unclear = without_typos
         print
 
     def dump_additional_names(self):
@@ -122,9 +244,13 @@ if __name__ == '__main__':
     curr_unclear = Unclear(NAMEBASE_F, NAMEBASE_M,
                            CONTACT_NAMES_F, CONTACT_NAMES_M, CONTACT_UNCLEAR,
                            PROCESSED_CONTACT_UNCLEAR)
+    curr_unclear.extract_first_names()
     curr_unclear.eliminate_abbr()
+    curr_unclear.eliminate_nonalpha()
     curr_unclear.eliminate_patronyms()
     curr_unclear.eliminate_declension()
-    curr_unclear.print_additional_names()
+    # curr_unclear.eliminate_typos()
+
+    # curr_unclear.print_additional_names()
     # curr_unclear.print_current_unclear()
-    curr_unclear.dump_additional_names()
+    # curr_unclear.dump_additional_names()
