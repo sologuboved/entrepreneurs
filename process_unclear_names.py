@@ -89,6 +89,8 @@ class Unclear(object):
     def print_resume(self):
         print curr_unclear.eliminations_count, "out of", curr_unclear.initial_total, 'eliminated'
         print "%d f names and %d m names are to be added" % (len(self.to_add_f), len(self.to_add_m))
+        print
+        print
 
     def extract_first_names(self):
         print "Extracting first names..."
@@ -270,8 +272,9 @@ if __name__ == '__main__':
 
     curr_unclear.print_additional_names()
     curr_unclear.print_current_unclear()
-    curr_unclear.dump_additional_names()
+    # curr_unclear.dump_additional_names()
 
     # TODO replacements
     # TODO capitalization
-    # TODO reload source file
+    # TODO reload f and m files
+    # TODO exclude names starting with the same letter

@@ -6,9 +6,6 @@ def is_suitable(original, unclear):
         return contains_swap(original, unclear)
 
 
-
-
-
 def contains_omission_or_redund(original, unclear):
     shorter, longer = sorted([original, unclear], key=len)
     for ind in range(len(shorter)):
