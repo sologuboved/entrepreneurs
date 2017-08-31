@@ -27,6 +27,8 @@ class Unclear(object):
         self.still_unclear = load_json(unclear_f)
         self.to_add_f = list()
         self.to_add_m = list()
+        self.initial_total = len(self.still_unclear)
+        self.eliminations_count = 0
 
     @staticmethod
     def get_nominative(name):
@@ -46,20 +48,15 @@ class Unclear(object):
             print orig_name
             print
 
-        if not uncl_name[0].isalpha():
-            print "IS NOT ALPHA", uncl_name,
-            uncl_name = uncl_name[1:]
-            print uncl_name
-
         for orig_name in namebase:
             if orig_name[0].lower() == uncl_name[0].lower():
                 if is_suitable(orig_name, uncl_name):
-                    # print_typo_correction()
+                    print_typo_correction()
                     return orig_name
 
         for orig_name in namebase:
             if is_suitable(orig_name, uncl_name):
-                # print_typo_correction()
+                print_typo_correction()
                 return orig_name
 
     def print_additional_names(self, female=True, male=True):
@@ -89,6 +86,10 @@ class Unclear(object):
             index += 1
         print
 
+    def print_resume(self):
+        print curr_unclear.eliminations_count, "out of", curr_unclear.initial_total, 'eliminated'
+        print "%d f names and %d m names are to be added" % (len(self.to_add_f), len(self.to_add_m))
+
     def extract_first_names(self):
         print "Extracting first names..."
 
@@ -111,17 +112,21 @@ class Unclear(object):
             else:
                 without_postfixes.append(name)
 
-        print "Out of %d names %d are left; %d f names and %d m names added" % (len(self.still_unclear),
-                                                                                len(without_postfixes),
-                                                                                count_f, count_m)
+        previous_l = len(self.still_unclear)
+        curr_l = len(without_postfixes)
+        print "Out of %d names %d are left; %d f names and %d m names added" % (previous_l, curr_l, count_f, count_m)
         self.still_unclear = without_postfixes
+        self.eliminations_count += (previous_l - curr_l)
         print
 
     def eliminate_nonalpha(self):
         print "Eliminating nonalpha..."
+
         count = 0
         without_nonalphas = list()
+
         for name in self.still_unclear:
+
             if not name.isalpha():
                 alphaed_name = str()
                 for char in name:
@@ -131,10 +136,17 @@ class Unclear(object):
                         count += 1
                 if alphaed_name:
                     without_nonalphas.append(alphaed_name)
+
+            else:
+                without_nonalphas.append(name)
+
         prev_l = len(self.still_unclear)
         curr_l = len(without_nonalphas)
+        diff = prev_l - curr_l
         print "Out of %d names %d are left; %d nonaplha strings and %d nonalpha characters eliminated" \
-              % (prev_l, curr_l, prev_l - curr_l, count)
+              % (prev_l, curr_l, diff, count)
+        self.still_unclear = without_nonalphas
+        self.eliminations_count += diff
         print
 
     def eliminate_abbr(self):
@@ -142,7 +154,9 @@ class Unclear(object):
         prev_l = len(self.still_unclear)
         self.still_unclear = [name for name in self.still_unclear if len(name) > 2]
         curr_l = len(self.still_unclear)
-        print "Out of %d names %d are left; %d abbreviations eliminated" % (prev_l, curr_l, prev_l - curr_l)
+        diff = prev_l - curr_l
+        print "Out of %d names %d are left; %d abbreviations eliminated" % (prev_l, curr_l, diff)
+        self.eliminations_count += diff
         print
 
     def eliminate_patronyms(self):
@@ -154,9 +168,11 @@ class Unclear(object):
 
         prev_l = len(self.still_unclear)
         curr_l = len(without_patronyms)
-        print "Out of %d names %d are left; %d patronyms eliminated" % (prev_l, curr_l, prev_l - curr_l)
+        diff = prev_l - curr_l
+        print "Out of %d names %d are left; %d patronyms eliminated" % (prev_l, curr_l, diff)
 
         self.still_unclear = without_patronyms
+        self.eliminations_count += diff
         print
 
     def eliminate_declension(self, show=False):
@@ -179,11 +195,11 @@ class Unclear(object):
                 without_declension.append(name)
 
         print
-        print "Out of %d names %d are left; %d f names and %d m names added" % (len(self.still_unclear),
-                                                                                len(without_declension),
-                                                                                count_f, count_m)
-
+        prev_l = len(self.still_unclear)
+        curr_l = len(without_declension)
+        print "Out of %d names %d are left; %d f names and %d m names added" % (prev_l, curr_l, count_f, count_m)
         self.still_unclear = without_declension
+        self.eliminations_count += (prev_l - curr_l)
         print
 
     def eliminate_typos(self):
@@ -215,11 +231,11 @@ class Unclear(object):
 
             without_typos.append(uncl_name)
 
-        print "Out of %d names %d are left; %d f names and %d m names added" % (len(self.still_unclear),
-                                                                                len(without_typos),
-                                                                                count_f, count_m)
-
+        prev_l = len(self.still_unclear)
+        curr_l = len(without_typos)
+        print "Out of %d names %d are left; %d f names and %d m names added" % (prev_l, curr_l, count_f, count_m)
         self.still_unclear = without_typos
+        self.eliminations_count += (prev_l - curr_l)
         print
 
     def dump_additional_names(self):
@@ -249,8 +265,13 @@ if __name__ == '__main__':
     curr_unclear.eliminate_nonalpha()
     curr_unclear.eliminate_patronyms()
     curr_unclear.eliminate_declension()
-    # curr_unclear.eliminate_typos()
+    curr_unclear.eliminate_typos()
+    curr_unclear.print_resume()
 
-    # curr_unclear.print_additional_names()
-    # curr_unclear.print_current_unclear()
-    # curr_unclear.dump_additional_names()
+    curr_unclear.print_additional_names()
+    curr_unclear.print_current_unclear()
+    curr_unclear.dump_additional_names()
+
+    # TODO replacements
+    # TODO capitalization
+    # TODO reload source file
