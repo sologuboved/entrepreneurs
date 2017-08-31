@@ -2,7 +2,6 @@
 
 import requests
 from bs4 import BeautifulSoup
-import json
 
 URL_F = 'http://kakzovut.ru/woman.html'
 URL_M = 'http://kakzovut.ru/man.html'
@@ -61,25 +60,15 @@ def substitute_ye_for_yo(name):
     return substituted
 
 
-def names_to_json(names, json_file):
-    with open(json_file, 'w') as handler:
-        json.dump(names, handler)
-
-
-def load_json(json_file):
-    with open(json_file) as data:
-        return json.load(data)
-
-
 if __name__ == '__main__':
     # names_f = scrape_names(URL_F)
-    # names_to_json(names_f, NAMEBASE_F)
+    # dump_json(names_f, NAMEBASE_F)
     #
     # names_m = scrape_names(URL_M)
-    # names_to_json(names_m, NAMEBASE_M)
+    # dump_json(names_m, NAMEBASE_M)
 
-    # names_to_json(amplify_namebase(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
-    # names_to_json(amplify_namebase(load_json(NAMEBASE_M)), NAMEBASE_M)
+    # dump_json(amplify_namebase(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
+    # dump_json(amplify_namebase(load_json(NAMEBASE_M)), NAMEBASE_M)
 
     pass
 

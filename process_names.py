@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from json_operations import load_json, dump_json
+from json_operations import *
 
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
