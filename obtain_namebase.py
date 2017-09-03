@@ -8,6 +8,8 @@ URL_F = 'http://kakzovut.ru/woman.html'
 URL_M = 'http://kakzovut.ru/man.html'
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
+ADDITIONAL_F = 'additional_f.txt'
+ADDITIONAL_M = 'additional_m.txt'
 
 
 def scrape_names(url):
@@ -16,18 +18,30 @@ def scrape_names(url):
     :return: list
     Scrape names from page
     """
+    print "Scraping names..."
     soup = BeautifulSoup(requests.get(url).content)
-    return [name.find_all('a')[0].text for name in soup.find_all('div', {'class': 'nameslist'})]
+    names = [name.find_all('a')[0].text for name in soup.find_all('div', {'class': 'nameslist'})]
+    without_brackets = list()
+    for name in names:
+        variants = name.split()
+        without_brackets.append(variants[0])
+        try:
+            without_brackets.append(variants[1][1: -1])
+        except IndexError:
+            pass
+    return without_brackets
 
 
-def amplify_namebase(names, fem=False):
+def amplify_namebase(names, additional):
     """
     :param names: list
-    :param fem: True or False
+    :param additional: str (filename)
     :return: list
     Include Фекла in addition to Фёкла, etc.
     Add names that are popular but missing from the original namebase
     """
+
+    print "Amplifying namebase..."
 
     amplified = list()
 
@@ -36,12 +50,9 @@ def amplify_namebase(names, fem=False):
         if u'ё' in name:
             amplified.append(substitute_ye_for_yo(name))
 
-    if fem:
-        amplified.extend([u'Наталия', u'София', u'Юлиана', u'Алеся', u'Бэлла', u'Салиса', u'Гали'])
-
-    else:
-        amplified.extend([u'Ринат',  u'Магомед',  u'Ильдар',  u'Данил',  u'Аслан',  u'Рустем',  u'Ренат',  u'Ришат',
-                          u'Афанасий',  u'Гагик', u'Омар', u'Малик', u'Эдик', u'Лева'])
+    with open(additional) as handler:
+        for name in handler.readlines():
+            amplified.append(name.strip())
 
     return amplified
 
@@ -52,6 +63,7 @@ def substitute_ye_for_yo(name):
     :return: string
     Substitute ё for е in the given name
     """
+    print u"Substituting е for ё..."
     substituted = ''
     for char in name:
         if char == u'ё':
@@ -68,8 +80,8 @@ if __name__ == '__main__':
     # names_m = scrape_names(URL_M)
     # dump_json(names_m, NAMEBASE_M)
     #
-    dump_json(amplify_namebase(load_json(NAMEBASE_F), fem=True), NAMEBASE_F)
-    dump_json(amplify_namebase(load_json(NAMEBASE_M)), NAMEBASE_M)
+    # dump_json(amplify_namebase(load_json(NAMEBASE_F), ADDITIONAL_F), NAMEBASE_F)
+    # dump_json(amplify_namebase(load_json(NAMEBASE_M), ADDITIONAL_M), NAMEBASE_M)
 
-    pass
-
+    for n in load_json(NAMEBASE_M):
+        print n

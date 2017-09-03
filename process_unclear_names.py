@@ -2,6 +2,7 @@
 
 from json_operations import *
 from correct_typos import is_suitable
+from stats import print_freqs
 
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
@@ -48,13 +49,17 @@ class Unclear(object):
             print orig_name
             print
 
+        first_char = uncl_name[0].lower()
+        namebase_diff_first_char = list()
         for orig_name in namebase:
-            if orig_name[0].lower() == uncl_name[0].lower():
+            if orig_name[0].lower() == first_char:
                 if is_suitable(orig_name, uncl_name):
                     print_typo_correction()
                     return orig_name
+            else:
+                namebase_diff_first_char.append(orig_name)
 
-        for orig_name in namebase:
+        for orig_name in namebase_diff_first_char:
             if is_suitable(orig_name, uncl_name):
                 print_typo_correction()
                 return orig_name
@@ -179,13 +184,15 @@ class Unclear(object):
 
     def eliminate_declension(self, show=False):
         print "Eliminating declension..."
-        count_f = count_m = 0
+        prev_l = len(self.still_unclear)
+        count = count_f = count_m = 0
         namebase_f = load_json(self.namebase_f)
         namebase_m = load_json(self.namebase_m)
         without_declension = list()
 
         for name in self.still_unclear:
-            print '* ',
+            count += 1
+            print '(%d out of %d) ' % (count, prev_l),
             nominative = self.get_nominative(name)
             if nominative in namebase_f:
                 self.to_add_f.append(nominative)
@@ -197,14 +204,13 @@ class Unclear(object):
                 without_declension.append(name)
 
         print
-        prev_l = len(self.still_unclear)
         curr_l = len(without_declension)
         print "Out of %d names %d are left; %d f names and %d m names added" % (prev_l, curr_l, count_f, count_m)
         self.still_unclear = without_declension
         self.eliminations_count += (prev_l - curr_l)
         print
 
-    def eliminate_typos(self):
+    def eliminate_typos(self, freqs=False):
         print "Eliminating typos..."
         name_count = count_f = count_m = 0
         namebase_f = load_json(self.namebase_f)
@@ -215,20 +221,20 @@ class Unclear(object):
         for uncl_name in self.still_unclear:
             name_count += 1
 
-            if uncl_name == u'Имя' or uncl_name == u'имя':
+            if len(uncl_name) < 4:  # including 'Имя' or 'имя'
                 without_typos.append(uncl_name)
-                continue
-
-            good_f_name = self.check_name_for_typo(uncl_name, name_count, total, namebase_f)
-            if good_f_name:
-                count_f += 1
-                self.to_add_f.append(good_f_name)
                 continue
 
             good_m_name = self.check_name_for_typo(uncl_name, name_count, total, namebase_m)
             if good_m_name:
                 count_m += 1
                 self.to_add_m.append(good_m_name)
+                continue
+
+            good_f_name = self.check_name_for_typo(uncl_name, name_count, total, namebase_f)
+            if good_f_name:
+                count_f += 1
+                self.to_add_f.append(good_f_name)
                 continue
 
             without_typos.append(uncl_name)
@@ -270,11 +276,11 @@ if __name__ == '__main__':
     curr_unclear.eliminate_typos()
     curr_unclear.print_resume()
 
-    curr_unclear.print_additional_names()
-    curr_unclear.print_current_unclear()
+    # curr_unclear.print_additional_names()
+    # curr_unclear.print_current_unclear()
+
     # curr_unclear.dump_additional_names()
 
-    # TODO replacements
     # TODO capitalization
     # TODO reload f and m files
-    # TODO exclude names starting with the same letter
+    # TODO Cyrillic
