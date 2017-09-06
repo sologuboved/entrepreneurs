@@ -115,3 +115,5 @@ def launch(names_f_file, names_m_file, unclear_file):
 
 if __name__ == '__main__':
     launch(NEW_CONTACT_NAMES_F, NEW_CONTACT_NAMES_M, NEW_CONTACT_UNCLEAR)
+
+

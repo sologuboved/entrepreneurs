@@ -57,3 +57,5 @@ if __name__ == '__main__':
     launch(FINAL_MERGED_CONTACT_NAMES,
            NAMEBASE_F, NAMEBASE_M,
            OLD_CONTACT_NAMES_F, OLD_CONTACT_NAMES_M, OLD_CONTACT_UNCLEAR)
+
+
