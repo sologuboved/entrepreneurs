@@ -4,11 +4,6 @@ from global_vars import *
 from json_operations import *
 from stats import group_names
 
-NAMEBASE_F = 'namebase_f.json'
-NAMEBASE_M = 'namebase_m.json'
-PE_NAMES_44 = 'pe_names_44.json'
-FINAL_MERGED_CONTACT_NAMES = 'final_merged_contact_names.json'
-
 
 def clean_names(names):
     """
@@ -54,8 +49,9 @@ def launch(source_json_file, namebase_f_file, namebase_m_file, names_f_file, nam
 
 
 if __name__ == '__main__':
-    launch(FINAL_MERGED_CONTACT_NAMES,
+    # launch(FINAL_MERGED_CONTACT_NAMES,
+    #        NAMEBASE_F, NAMEBASE_M,
+    #        OLD_CONTACT_NAMES_F, OLD_CONTACT_NAMES_M, OLD_CONTACT_UNCLEAR)
+    launch(PE_NAMES_44,
            NAMEBASE_F, NAMEBASE_M,
-           OLD_CONTACT_NAMES_F, OLD_CONTACT_NAMES_M, OLD_CONTACT_UNCLEAR)
-
-
+           OLD_PE_NAMES_F, OLD_PE_NAMES_M, OLD_PE_UNCLEAR)

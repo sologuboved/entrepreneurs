@@ -270,9 +270,11 @@ def launch(namebase_f_f, namebase_m_f,
 
 
 if __name__ == '__main__':
+    # launch(NAMEBASE_F, NAMEBASE_M,
+    #        OLD_CONTACT_NAMES_F, OLD_CONTACT_NAMES_M, OLD_CONTACT_UNCLEAR,
+    #        NEW_CONTACT_NAMES_F, NEW_CONTACT_NAMES_M, NEW_CONTACT_UNCLEAR,
+    #        with_dump=True)
     launch(NAMEBASE_F, NAMEBASE_M,
-           OLD_CONTACT_NAMES_F, OLD_CONTACT_NAMES_M, OLD_CONTACT_UNCLEAR,
-           NEW_CONTACT_NAMES_F, NEW_CONTACT_NAMES_M, NEW_CONTACT_UNCLEAR,
+           OLD_PE_NAMES_F, OLD_PE_NAMES_M, OLD_PE_UNCLEAR,
+           NEW_PE_NAMES_F, NEW_PE_NAMES_M, NEW_PE_UNCLEAR,
            with_dump=True)
-
-

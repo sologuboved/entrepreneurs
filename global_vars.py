@@ -1,5 +1,10 @@
+# -*- coding: utf-8 -*-
+
 NAMEBASE_F = 'namebase_f.json'
 NAMEBASE_M = 'namebase_m.json'
+
+PE_NAMES_44 = 'pe_names_44.json'
+FINAL_MERGED_CONTACT_NAMES = 'final_merged_contact_names.json'
 
 OLD_PE_NAMES_F = 'old_pe_names_f.json'
 OLD_PE_NAMES_M = 'old_pe_names_m.json'
