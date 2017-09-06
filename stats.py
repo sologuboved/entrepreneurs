@@ -1,10 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from json_operations import load_json
-
-CONTACT_NAMES_F = 'contact_names_f.json'
-CONTACT_NAMES_M = 'contact_names_m.json'
-CONTACT_UNCLEAR = 'contact_unclear.json'
+from global_vars import *
 
 
 def compile_freq_dict(names):
@@ -94,6 +91,22 @@ def print_freqs(names, label, fem, lim=None):
     print
 
 
+def group_names(names, namebase_f, namebase_m):
+    names_f = list()
+    names_m = list()
+    unclear = list()
+
+    for name in names:
+        if name in namebase_f:
+            names_f.append(name)
+        elif name in namebase_m:
+            names_m.append(name)
+        else:
+            unclear.append(name)
+
+    return names_f, names_m, unclear
+
+
 def launch(names_f_file, names_m_file, unclear_file):
     print_freqs(load_json(names_f_file), 'FEMALE', True)
     print_freqs(load_json(names_m_file), 'MALE', False)
@@ -101,4 +114,4 @@ def launch(names_f_file, names_m_file, unclear_file):
 
 
 if __name__ == '__main__':
-    launch(CONTACT_NAMES_F, CONTACT_NAMES_M, CONTACT_UNCLEAR)
+    launch(NEW_CONTACT_NAMES_F, NEW_CONTACT_NAMES_M, NEW_CONTACT_UNCLEAR)
